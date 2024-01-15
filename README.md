@@ -277,6 +277,169 @@ Bu ayarları yaptıktan sonra tarayıcınızı açıp test edebilirsiniz.
 İşlem başarıyla tamamlanmıştır.
 
 
+## LAMP Stack Kurulumu
+
+MYSQL server ve PHP Apache modüllerini yüklüyoruz:
+
+```
+apt install mysql-server php libapache2-mod-php php-mysql -y
+```
+
+Servisimizi `systemctl restart apache2.service` yazarak yeniden başlatıyoruz.
+
+Tüm Firewall izinlerimizi veriyoruz:
+
+```
+ufw allow "Apache Full"
+```
+
+### PHP
+Artık serverımızda `PHP` kodlarıda çalışacaktır. Bunu şöyle test edebiliriz.
+
+`nano /var/www/sirket1.com/dosyalar/info.php` yazarak info.php dosyasını oluşturup içerisine aşağıdaki komutu yazabiliriz.
+
+```
+<?php
+phpinfo ();
+?>
+```
+
+Bunu yazdıktan sonra systemctl restart `apache2.service` yazabilirsiniz.
+
+Tarayıcımızı açıp test edelim:
+
+![image](https://github.com/ugurcomptech/Ubuntu-WEB-Server/assets/133202238/7252aa88-9eaf-4b13-b534-d2144e232314)
+
+
+
+### MYSQL
+
+MySQL veritabanı sunucunuzu güvenli bir şekilde yapılandıralım:
+
+```
+mysql_secure_instalattion
+```
+
+Bu komutu yazdıktan sonra ihtiyaçlarınıza göre gelen sorulara **Yes** veya **No** Diyebilirsiniz.
+
+`mysql` yazarak giriş yapabiliriz.
+
+MYSQL açıldığında aşağıdaki komutu yazarak `root` kullanıcısı oluşturalım:
+
+```
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '1234-Aaa!';
+```
+
+**Not:** En başta yapılandırırken sizden direkt olarak da bir şifre belirlemenizi isteyebilir.
+
+Şifrenizi değiştirmek isterseniz tekrardan `mysql_secure_instalattion` yazabilirsiniz.
+
+![image](https://github.com/ugurcomptech/Ubuntu-WEB-Server/assets/133202238/f4b887af-400a-4732-8f57-21c30fedffd5)
+
+
+Tekrardan mysqle giriş yapmak istediğimizde aşağıdaki gibi hata alabiliriz.
+
+![image](https://github.com/ugurcomptech/Ubuntu-WEB-Server/assets/133202238/c3c3912e-f0f4-4be4-903d-ac8575bce8a9)
+
+Kullanıcı ve şifre oluşturduğumuz için aşağıdaki gibi giriş yapacağız:
+
+![image](https://github.com/ugurcomptech/Ubuntu-WEB-Server/assets/133202238/51226c80-256a-4459-b330-d53f92587b64)
+
+
+Varolan Databaseleri görmek için aşağıdaki komutu yazabilirsiniz:
+
+```
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+4 rows in set (0.03 sec)
+mysql>
+```
+
+Databaselerdeki tabloları görmek istiyorsanız aşağıdaki gibi yazabilirsiniz:
+
+```
+mysql> use mysql
+Database changed
+mysql> show tables;
++------------------------------------------------------+
+| Tables_in_mysql                                      |
++------------------------------------------------------+
+| columns_priv                                         |
+| component                                            |
+| db                                                   |
+| default_roles                                        |
+| engine_cost                                          |
+| func                                                 |
+| general_log                                          |
+| global_grants                                        |
+| gtid_executed                                        |
+| help_category                                        |
+| help_keyword                                         |
+| help_relation                                        |
+| help_topic                                           |
+| innodb_index_stats                                   |
+| innodb_table_stats                                   |
+| password_history                                     |
+| plugin                                               |
+| procs_priv                                           |
+| proxies_priv                                         |
+| replication_asynchronous_connection_failover         |
+| replication_asynchronous_connection_failover_managed |
+| replication_group_configuration_version              |
+| replication_group_member_actions                     |
+| role_edges                                           |
+| server_cost                                          |
+| servers                                              |
+| slave_master_info                                    |
+| slave_relay_log_info                                 |
+| slave_worker_info                                    |
+| slow_log                                             |
+| tables_priv                                          |
+| time_zone                                            |
+| time_zone_leap_second                                |
+| time_zone_name                                       |
+| time_zone_transition                                 |
+| time_zone_transition_type                            |
+| user                                                 |
++------------------------------------------------------+
+37 rows in set (0.02 sec)
+
+mysql>
+```
+
+
+Tabloların içindeki verileri görmek istiyorsanız sorgu yazmanız gerekecektir. Aşağıda user tablosu için basit bir sorgu yazılmıştır.
+
+```
+mysql> SELECT * FROM user;
+```
+
+Sonuçlar biraz karmaşık gelecektir. Aşağıdaki sorguyla sadece belirli verileri isteyebilirsiniz.
+
+```
+mysql> SELECT user,host,plugin FROM user;
++------------------+-----------+-----------------------+
+| user             | host      | plugin                |
++------------------+-----------+-----------------------+
+| debian-sys-maint | localhost | caching_sha2_password |
+| mysql.infoschema | localhost | caching_sha2_password |
+| mysql.session    | localhost | caching_sha2_password |
+| mysql.sys        | localhost | caching_sha2_password |
+| root             | localhost | mysql_native_password |
++------------------+-----------+-----------------------+
+5 rows in set (0.00 sec)
+mysql>
+```
+
+
+
 
 
 
