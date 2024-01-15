@@ -438,6 +438,32 @@ mysql> SELECT user,host,plugin FROM user;
 mysql>
 ```
 
+## PhpMyAdmin
+
+PhpMyAdmini indiriyoruz:
+
+```
+apt install phpmyadmin -y
+```
+
+İsterseniz gerekli configleri çıkan ekranlardan da yapabilirsiniz. Biz gerekli configleri `MYSQL` üzerinden yapacağız.
+
+
+`mysql -u root-p` yazıp giriş yapıyoruz ve aşağıdaki komutları sırayla yazıyoruz.
+
+```
+CREATE USER 'phpmyadmin'@'localhost' IDENTIFIED BY '1234-Aaa!';
+
+GRANT ALL PRIVILEGES ON *.* TO 'phpmyadmin'@'localhost';
+```
+
+Bu komutları yazdıktan sonra `apt purge phpmyadmin -y` ve `apt  install phpmyadmin -y` yazarak da devam edebilirsiniz. Aynı işlemlerden tekrarını buradan yapabilirsiniz. 
+
+
+
+
+
+
 
 
 
