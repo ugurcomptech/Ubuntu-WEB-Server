@@ -142,19 +142,139 @@ Tarayıcımıza gelip kontrol ediyoruz:
 ![image](https://github.com/ugurcomptech/Ubuntu-WEB-Server/assets/133202238/f274b4ef-181b-433e-a930-dd7244628c24)
 
 
+## Aynı Portta Çoklu Site Yayınlama
+
+Şimdi bunu test etmek için ikinci bir site daha oluşturacağız.
+
+```
+mkdir -p /var/www/sirket2.com/dosyalar
+```
+
+Gerekli izinlei verelim:
+
+```
+chown -R www-data: /var/www/sirket2.com/dosyalar
+chown -R 755 /var/www/sirket2.com/dosyalar
+```
+
+İndex.html dosyamızı açalım ve içine istediğimizi yazalım
+
+```
+nano /var/www/sirket2.com/dosyalar/index.html
+```
+
+Şimdi `.conf` dosyalarımızı yapılandıralım:
+
+
+sirket1.conf dosyası:
+
+```
+<VirtualHost *:80>
+        # The ServerName directive sets the request scheme, hostname and port that
+        # the server uses to identify itself. This is used when creating
+        # redirection URLs. In the context of virtual hosts, the ServerName
+        # specifies what hostname must appear in the request's Host: header to
+        # match this virtual host. For the default virtual host (this file) this
+        # value is not decisive as it is used as a last resort host regardless.
+        # However, you must set it for any further virtual host explicitly.
+        #ServerName www.example.com
+
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/sirket1.com/dosyalar
+        ServerName sirket1.com
+        ServerAlias www.sirket1.com
 
 
 
+        # Available loglevels: trace8, ..., trace1, debug, info, notice, warn,
+        # error, crit, alert, emerg.
+        # It is also possible to configure the loglevel for particular
+        # modules, e.g.
+        #LogLevel info ssl:warn
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+        # For most configuration files from conf-available/, which are
+        # enabled or disabled at a global level, it is possible to
+        # include a line for only one particular virtual host. For example the
+        # following line enables the CGI configuration for this host only
+        # after it has been globally disabled with "a2disconf".
+        #Include conf-available/serve-cgi-bin.conf
+</VirtualHost>
+
+# vim: syntax=apache ts=4 sw=4 sts=4 sr noet
+```
 
 
 
+sirket2.conf dosyası:
+
+```
+<VirtualHost *:80>
+        # The ServerName directive sets the request scheme, hostname and port that
+        # the server uses to identify itself. This is used when creating
+        # redirection URLs. In the context of virtual hosts, the ServerName
+        # specifies what hostname must appear in the request's Host: header to
+        # match this virtual host. For the default virtual host (this file) this
+        # value is not decisive as it is used as a last resort host regardless.
+        # However, you must set it for any further virtual host explicitly.
+        #ServerName www.example.com
+
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/sirket2.com/dosyalar
+        ServerName sirket2.com
+        ServerAlias www.sirket2.com
 
 
 
+        # Available loglevels: trace8, ..., trace1, debug, info, notice, warn,
+        # error, crit, alert, emerg.
+        # It is also possible to configure the loglevel for particular
+        # modules, e.g.
+        #LogLevel info ssl:warn
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+        # For most configuration files from conf-available/, which are
+        # enabled or disabled at a global level, it is possible to
+        # include a line for only one particular virtual host. For example the
+        # following line enables the CGI configuration for this host only
+        # after it has been globally disabled with "a2disconf".
+        #Include conf-available/serve-cgi-bin.conf
+</VirtualHost>
+
+# vim: syntax=apache ts=4 sw=4 sts=4 sr noet
+```
 
 
 
+Gerekli yapılandırmaları yaptıktan sonra `apache2ctl configtest` yazarak config dosyalarımızı test edelim. Bir hata almadıysak devam edebiliriz. Şimdi apache servisimizi `systemctl restart apache2.service` yazarak yeniden başlatalım
 
+
+Şuan gerekli yapılandırmaları yaptık. Şimdi bunu ister DNS serverımıza tanıtabiliriz, istersek de kendi localimizdeki hosts dosyasına tanıtabiliriz. Daha kolay olması açısından Windows bilgisayarımızdaki host dosyasına tanıtalım.
+
+`C:\Windows\System32\drivers\etc` dosya yoluna gidip `hosts` dosyasını masaüstüne yapıştırın. Dosyası açtıktan sonra aşağıdaki tanımları yapın ve kaydedin. Kaydettikten sonra masaüstündeki dosyası tekrardan `C:\Windows\System32\drivers\etc` dosya yoluna yapıştırın.
+
+```
+172.16.1.35	sirket1.com
+172.16.1.35	www.sirket1.com
+
+172.16.1.35	sirket2.com
+172.16.1.35	www.sirket2.com
+```
+
+Bu ayarları yaptıktan sonra tarayıcınızı açıp test edebilirsiniz.
+
+
+![image](https://github.com/ugurcomptech/Ubuntu-WEB-Server/assets/133202238/1555f751-1811-43a1-9011-81a0dceaba9b)
+
+
+![image](https://github.com/ugurcomptech/Ubuntu-WEB-Server/assets/133202238/cbcb4493-acd3-4d48-8025-bd20e3725f58)
+
+
+İşlem başarıyla tamamlanmıştır.
 
 
 
