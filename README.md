@@ -461,15 +461,37 @@ Bu komutları yazdıktan sonra `apt purge phpmyadmin -y` ve `apt  install phpmya
 
 
 
+##  SSL Kurulumu
+SSL (Secure Sockets Layer), internet üzerindeki veri iletimini şifreleyen bir güvenlik protokolüdür. Bu, kullanıcıların web siteleri aracılığıyla bilgi gönderirken, üçüncü şahısların bu bilgilere erişmesini zorlaştırarak güvenli bir iletişim sağlar.
+Şimdi serverımıza SSL kuracağız. Aşağıdaki komutu yazarak gerekli indirmeleri yapalım.
+
+
+```
+sudo apt install certbot python3-certbot-apache
+```
+
+
+Terminale certbot --apache yazıyoruz.
 
 
 
+![image](https://github.com/ugurcomptech/Ubuntu-WEB-Server/assets/133202238/359bad04-e3b8-413a-b1b9-f5261a8edf9d)
+
+Bu kısımda SSL sertifikasını kurmak istediğiniz alan adını belirtiyorsunuz. Ben "altimasiciyorum.com.tr" alan adımı seçiyorum.
+
+![image](https://github.com/ugurcomptech/Ubuntu-WEB-Server/assets/133202238/a7018d2f-1d17-40a9-999e-9d58b38442d9)
+
+Bana burada belirtmiş olduğum sitede zaten bir SSL olduğunu ve sertifikayı kaldırıp yeniden yükleyebileceğimizi yada sertifikayı yenileyip değiştirebileceğimizi söylüyor. Ben sertifikayı tekrar yükleyeceğim.
+
+![image](https://github.com/ugurcomptech/Ubuntu-WEB-Server/assets/133202238/30768cc7-1b34-4b9e-9626-c901324effab)
+
+Kurulum otomatik tamamlandı ve SSL sertifikamız başarılı bir şekilde kuruldu. SSL sertifkanızın .conf dosya yoluna gitmek için `/etc/httpd/conf.d/alanadi.com-le-ssl.com` yazabilirsiniz.
+
+![image](https://github.com/ugurcomptech/Ubuntu-WEB-Server/assets/133202238/8fd9216a-7b99-4d7f-8c31-266d526057b9)
 
 
+Web sitemize giriş yapıp ilgili sertifikayıda kontrol edebilirsiniz.
 
-
-
-
-
+![image](https://github.com/ugurcomptech/Ubuntu-WEB-Server/assets/133202238/0efdef4c-85b1-4d5f-9de9-8b41a30d3379)
 
 
